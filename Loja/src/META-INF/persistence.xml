@@ -7,22 +7,21 @@
     version="2.0" 
     xmlns="http://java.sun.com/xml/ns/persistence">
   
-	<persistence-unit name="LibraryJPA" transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="LibraryLoja" transaction-type="RESOURCE_LOCAL">
   
-        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>Loja.Produto</class>
-        <class>Loja.Categoria</class>
-        <class>Loja.Beleza</class>
-        <class>Loja.Casa</class>
-        <class>Loja.Acessorio</class>
- 		<class>Loja.Roupa</class>
+        <class>loja.Produto</class>
+        <class>loja.Roupa</class>
+        <class>loja.Acessorios</class>
+        <class>loja.Beleza</class>
+        <class>loja.Casa</class>
+ 
         <properties>
    
         <property name="eclipselink.target-database" value="Derby" />
             <property name="javax.persistence.jdbc.driver"
                 value="org.apache.derby.jdbc.EmbeddedDriver" />
             <property name="javax.persistence.jdbc.url"
-                value="jdbc:derby:C:\\Users\\gonca\\OneDrive\\Desktop\\ProjetoLP\\MyDB;create=true" />
+                value="jdbc:derby:C:\Users\Luísa Magalhães\Desktop\Library;create=true" />
 
             <!-- EclipseLink should create the database schema automatically -->
             
