@@ -16,8 +16,7 @@ public class Main {
             // Iniciar uma transação
             em.getTransaction().begin();
 
-            // Limpar dados antigos
-            em.createQuery("DELETE FROM Produto").executeUpdate();
+            // APAGADO ESTE MÉTODO QUE SERVIA PARA APAGAR DADOS, 08/11 em.createQuery("DELETE FROM Produto").executeUpdate();
 
             // Inserir novos produtos
             // Roupas
