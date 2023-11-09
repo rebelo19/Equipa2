@@ -5,6 +5,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+/**
+ * Classe principal que contém o método main para executar o programa. De acordo com CRUD.
+ */
+
 public class Main {
 
     public static void main(String[] args) {
@@ -13,7 +17,9 @@ public class Main {
         ProdutoService produtoService = new ProdutoService(em);
 
         try {
-            // Iniciar uma transação
+        	/**
+        	 * Iniciar uma transação
+        	 */
             em.getTransaction().begin();
 
             // APAGADO ESTE MÉTODO QUE SERVIA PARA APAGAR DADOS, 08/11 em.createQuery("DELETE FROM Produto").executeUpdate();
@@ -71,10 +77,14 @@ public class Main {
             conjuntoPanelas.setParaRecolhaNaLoja(false);
             produtoService.updateProduto(conjuntoPanelas);
 
-            // Commitar a transação
+            /**
+        	 * Dar commit da transação.
+        	 */
             em.getTransaction().commit();
 
-            // Listar produtos por categorias
+            /**
+        	 * Listar produtos por categorias.
+        	 */
             List<Roupa> roupas = produtoService.findAllRoupas();
             List<Acessorios> acessorios = produtoService.findAllAcessorios();
             List<Beleza> beleza = produtoService.findAllBeleza();
@@ -84,28 +94,36 @@ public class Main {
             System.out.println("------ PRODUTOS DISPONÍVEIS NA LOJA ------");
             System.out.println("");
 
-            // Listar roupas
+            /**
+        	 * Listar roupas.
+        	 */
             System.out.println("ROUPAS:");
             for (Roupa roupa : roupas) {
                 System.out.println(roupa.getNome() + " - Tamanho: " + roupa.getTamanho());
             }
             System.out.println("-------------------------");
 
-            // Listar acessórios
+            /**
+        	 * Listar acessórios.
+        	 */
             System.out.println("ACESSÓRIOS:");
             for (Acessorios acessorio : acessorios) {
                 System.out.println(acessorio.getNome() + " - Material: " + acessorio.getMaterial());
             }
             System.out.println("-------------------------");
 
-            // Listar produtos de beleza
+            /**
+        	 * Listar produtos de beleza.
+        	 */
             System.out.println("PRODUTOS DE BELEZA:");
             for (Beleza produtoBeleza : beleza) {
                 System.out.println(produtoBeleza.getNome() + " - Tipo: " + produtoBeleza.getTipo());
             }
             System.out.println("-------------------------");
 
-            // Listar produtos de casa
+            /**
+        	 * Listar produtos para casa.
+        	 */
             System.out.println("PRODUTOS PARA CASA:");
             for (Casa produtoCasa : casa) {
                 System.out.println(produtoCasa.getNome() + " - Para Recolha na Loja: " + produtoCasa.isParaRecolhaNaLoja());
@@ -116,20 +134,28 @@ public class Main {
             System.out.println("------ EXEMPLO DE COMPRA -------");
             System.out.println("");
             
-            // Adicionar produtos ao carrinho
+            /**
+        	 * Adicionar produtos ao carrinho.
+        	 */
             Carrinho carrinho = new Carrinho();
             carrinho.adicionarProduto(camisaazul);
             carrinho.adicionarProduto(relogio);
             carrinho.adicionarProduto(conjuntoPanelas);
 
-            // Remover produto do carrinho
+            /**
+        	 * Remover produtos do carrinho.
+        	 */
             carrinho.removerProduto(camisaazul);
 
-            // Listar produtos no carrinho
+            /**
+        	 * Listar produtos no carrinho.
+        	 */
             System.out.println("Produtos no carrinho:");
             carrinho.listarProdutos();
 
-            // Finalizar a compra
+            /**
+        	 * Finalizar a compra.
+        	 */
             double totalCompra = carrinho.calcularTotal();
             System.out.println("Total da compra: €" + totalCompra);
             carrinho.finalizarCompra();
@@ -139,7 +165,10 @@ public class Main {
             em.getTransaction().rollback();
             e.printStackTrace();
         } finally {
-            // Fechar o EntityManager e o EntityManagerFactory
+        	
+        	/**
+        	 * Fechar o EntityManager e o EntityManagerFactory.
+        	 */
             em.close();
             emf.close();
         }

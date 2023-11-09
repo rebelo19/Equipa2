@@ -4,13 +4,28 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
+/**
+ * Classe de serviço que fornece operações relacionadas a produtos no banco de dados.
+ */
 public class ProdutoService {
+
+    /**
+     * Gestor de entidades para interagir com o banco de dados.
+     */
     protected EntityManager em;
 
+    /**
+     * Construtor que recebe um EntityManager como parâmetro.
+     *
+     * @param em EntityManager para interação com o banco de dados.
+     */
     public ProdutoService(EntityManager em) {
         this.em = em;
     }
 
+    /**
+     * Métodos para realizar operações de CRUD no banco de dados.
+     */
     public Produto updateProduto(Produto produto) {
         if (produto.getId() == null) {
             em.persist(produto);
