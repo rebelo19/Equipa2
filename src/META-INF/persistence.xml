@@ -21,7 +21,7 @@
             <property name="javax.persistence.jdbc.driver"
                 value="org.apache.derby.jdbc.EmbeddedDriver" />
             <property name="javax.persistence.jdbc.url"
-                value="jdbc:derby:C:\Users\Luísa Magalhães\Desktop\Library;create=true" />
+                value="jdbc:derby:/Users/luisamg24/Documents/Library;create=true" />
 
             <!-- EclipseLink should create the database schema automatically -->
             
