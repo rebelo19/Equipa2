@@ -16,8 +16,6 @@ public class ProdutoService {
 
     /**
      * Construtor que recebe um EntityManager como parâmetro.
-     *
-     * @param em EntityManager para interação com o banco de dados.
      */
     public ProdutoService(EntityManager em) {
         this.em = em;
