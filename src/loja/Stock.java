@@ -1,7 +1,10 @@
 package loja;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 /**
@@ -11,18 +14,24 @@ import javax.persistence.OneToOne;
 public class Stock {
 
     @Id
-    private Long stockId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @OneToOne
+    @JoinColumn(name = "produto_id")
     private Produto produto;
+
     private int quantidade;
 
-    public Long getStockId() {
-        return stockId;
+    /**
+     * Getters e setters.
+     */
+    public Long getId() {
+        return id;
     }
 
-    public void setStockId(Long stockId) {
-        this.stockId = stockId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Produto getProduto() {
@@ -40,4 +49,5 @@ public class Stock {
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
+    
 }

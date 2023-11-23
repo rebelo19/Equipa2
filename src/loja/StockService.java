@@ -19,31 +19,27 @@ public class StockService {
     }
 
     /**
-     * Adiciona ou atualiza o stock de um produto na loja.
+     * Adiciona stock para um produto que ainda não tem stock na loja.
      */
-    public void addOrUpdateStock(Produto produto, int quantidade) {
+    public void addStock(Produto produto, int quantidade) {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
 
         Stock stock = getStock(produto);
 
         if (stock == null) {
-            // Se o produto não existir no stock, cria um novo registo no stock.
             stock = new Stock();
             stock.setProduto(produto);
-            stock.setQuantidade(quantidade);
             entityManager.persist(stock);
-        } else {
-            // Se o produto já existir no stock, atualiza a quantidade existente.
-            stock.setQuantidade(stock.getQuantidade() + quantidade);
-            entityManager.merge(stock);
+            produto.setStock(stock);
         }
 
+        stock.setQuantidade(stock.getQuantidade() + quantidade);
         transaction.commit();
     }
 
     /**
-     * Atualiza a quantidade disponível no stock para um produto específico.
+     * Atualiza a quantidade disponível no stock para um produto que já tem stock na loja.
      */
     public void updateStock(Produto produto, int newQuantidade) {
         EntityTransaction transaction = entityManager.getTransaction();
@@ -68,7 +64,7 @@ public class StockService {
     /**
      * Obtém uma lista de todos os registos de stock na loja.
      */
-    public List<Stock> getAllStock() {
+    public List<Stock> listarQuantidadesDisponiveis() {
         Query query = entityManager.createQuery("SELECT s FROM Stock s", Stock.class);
         return query.getResultList();
     }

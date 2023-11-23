@@ -8,83 +8,94 @@ import javax.persistence.Persistence;
 /**
  * Classe principal que contém o método main para executar o programa. De acordo com CRUD.
  */
-
 public class Main {
 
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("LibraryLoja");
         EntityManager em = emf.createEntityManager();
         ProdutoService produtoService = new ProdutoService(em);
+        StockService stockService = new StockService(em); // Adicione esta linha
 
         try {
-        	/**
-        	 * Iniciar uma transação
-        	 */
+            /**
+             * Iniciar uma transação
+             */
             em.getTransaction().begin();
 
-            // APAGADO ESTE MÉTODO QUE SERVIA PARA APAGAR DADOS, 08/11 em.createQuery("DELETE FROM Produto").executeUpdate();
+            /**
+             * Inserir produtos.
+             */
 
-            // Inserir novos produtos
             // Roupas
             Roupa camisaazul = new Roupa();
             camisaazul.setNome("Camisa Azul");
             camisaazul.setPreco(9.99);
             camisaazul.setTamanho("M");
-            produtoService.updateProduto(camisaazul);
 
             Roupa calcasganga = new Roupa();
             calcasganga.setNome("Calças Ganga");
             calcasganga.setPreco(19.99);
             calcasganga.setTamanho("34");
-            produtoService.updateProduto(calcasganga);
 
             // Acessórios
             Acessorios relogio = new Acessorios();
             relogio.setNome("Relógio Swatch");
             relogio.setPreco(99.99);
             relogio.setMaterial("Metal");
-            produtoService.updateProduto(relogio);
 
             Acessorios oculosDeSol = new Acessorios();
             oculosDeSol.setNome("Óculos de Sol");
             oculosDeSol.setPreco(5.99);
             oculosDeSol.setMaterial("Plástico");
-            produtoService.updateProduto(oculosDeSol);
 
             // Beleza
             Beleza perfume = new Beleza();
             perfume.setNome("Invictus");
             perfume.setPreco(49.99);
             perfume.setTipo("Perfume");
-            produtoService.updateProduto(perfume);
 
             Beleza batomVermelho = new Beleza();
             batomVermelho.setNome("Batom Vermelho");
             batomVermelho.setPreco(2.99);
             batomVermelho.setTipo("Maquilhagem");
-            produtoService.updateProduto(batomVermelho);
 
             // Casa
             Casa almofada = new Casa();
             almofada.setNome("Almofada Comprida");
             almofada.setPreco(19.99);
             almofada.setParaRecolhaNaLoja(true);
-            produtoService.updateProduto(almofada);
 
             Casa conjuntoPanelas = new Casa();
             conjuntoPanelas.setNome("Conjunto de Panelas");
             conjuntoPanelas.setPreco(99.99);
             conjuntoPanelas.setParaRecolhaNaLoja(false);
+
+            /**
+             * Persistir produtos.
+             */
+            produtoService.updateProduto(camisaazul);
+            produtoService.updateProduto(calcasganga);
+            produtoService.updateProduto(relogio);
+            produtoService.updateProduto(oculosDeSol);
+            produtoService.updateProduto(perfume);
+            produtoService.updateProduto(batomVermelho);
+            produtoService.updateProduto(almofada);
             produtoService.updateProduto(conjuntoPanelas);
 
             /**
-        	 * Dar commit da transação.
-        	 */
+             * Dar commit da transação.
+             */
             em.getTransaction().commit();
 
             /**
-        	 * Listar produtos por categorias.
-        	 */
+             * Dar commit da transação.
+             */
+            stockService.addStock(camisaazul, 50);
+            stockService.addStock(relogio, 30);
+
+            /**
+             * Listar produtos por categorias.
+             */
             List<Roupa> roupas = produtoService.findAllRoupas();
             List<Acessorios> acessorios = produtoService.findAllAcessorios();
             List<Beleza> beleza = produtoService.findAllBeleza();
@@ -95,45 +106,52 @@ public class Main {
             System.out.println("");
 
             /**
-        	 * Listar roupas.
-        	 */
+             * Listar roupas.
+             */
             System.out.println("ROUPAS:");
             for (Roupa roupa : roupas) {
-                System.out.println(roupa.getNome() + " - Tamanho: " + roupa.getTamanho());
+                int quantidadeDisponivel = stockService.getQuantidadeDisponivel(roupa);
+                System.out.println(roupa.getNome() + " - Tamanho: " + roupa.getTamanho() + " - Preço: €" + roupa.getPreco() + " - Quantidade Disponível: " + quantidadeDisponivel);
             }
             System.out.println("-------------------------");
 
             /**
-        	 * Listar acessórios.
-        	 */
+             * Listar acessórios.
+             */
             System.out.println("ACESSÓRIOS:");
             for (Acessorios acessorio : acessorios) {
-                System.out.println(acessorio.getNome() + " - Material: " + acessorio.getMaterial());
+                int quantidadeDisponivel = stockService.getQuantidadeDisponivel(acessorio);
+                System.out.println(acessorio.getNome() + " - Material: " + acessorio.getMaterial() + " - Preço: €" + acessorio.getPreco() + " - Quantidade Disponível: " + quantidadeDisponivel);
             }
             System.out.println("-------------------------");
 
             /**
-        	 * Listar produtos de beleza.
-        	 */
+             * Listar produtos de beleza.
+             */
             System.out.println("PRODUTOS DE BELEZA:");
             for (Beleza produtoBeleza : beleza) {
-                System.out.println(produtoBeleza.getNome() + " - Tipo: " + produtoBeleza.getTipo());
+                int quantidadeDisponivel = stockService.getQuantidadeDisponivel(produtoBeleza);
+                System.out.println(produtoBeleza.getNome() + " - Tipo: " + produtoBeleza.getTipo() + " - Preço: €" + produtoBeleza.getPreco() + " - Quantidade Disponível: " + quantidadeDisponivel);
             }
             System.out.println("-------------------------");
-
+            
             /**
-        	 * Listar produtos para casa.
-        	 */
+             * Listar produtos para casa.
+             */
             System.out.println("PRODUTOS PARA CASA:");
             for (Casa produtoCasa : casa) {
-                System.out.println(produtoCasa.getNome() + " - Para Recolha na Loja: " + produtoCasa.isParaRecolhaNaLoja());
+                int quantidadeDisponivel = stockService.getQuantidadeDisponivel(produtoCasa);
+                System.out.println(produtoCasa.getNome() + " - Para Recolha na Loja: " + produtoCasa.isParaRecolhaNaLoja() + " - Preço: €" + produtoCasa.getPreco() + " - Quantidade Disponível: " + quantidadeDisponivel);
             }
             
+            /**
+             * Exemplo de compra.
+             */
             System.out.println("");
             System.out.println("");
             System.out.println("------ EXEMPLO DE COMPRA -------");
             System.out.println("");
-            
+
             /**
         	 * Adicionar produtos ao carrinho.
         	 */
@@ -159,18 +177,34 @@ public class Main {
             double totalCompra = carrinho.calcularTotal();
             System.out.println("Total da compra: €" + totalCompra);
             carrinho.finalizarCompra();
-            
+
+            /**
+             * Consultar quantidade disponível de um produto.
+             */
+            int quantidadeCamisaAzul = stockService.getQuantidadeDisponivel(camisaazul);
+            System.out.println("Quantidade disponível de Camisa Azul: " + quantidadeCamisaAzul);
+
+            /**
+             * Listar quantidades disponíveis de todos os produtos.
+             */
+            List<Stock> quantidadesDisponiveis = stockService.listarQuantidadesDisponiveis();
+            for (Stock stock : quantidadesDisponiveis) {
+                System.out.println("Produto: " + stock.getProduto().getNome() + ", Quantidade disponível: " + stock.getQuantidade());
+            }
+
         } catch (Exception e) {
             // Se ocorrer algum erro, fazer rollback na transação
             em.getTransaction().rollback();
             e.printStackTrace();
         } finally {
-        	
-        	/**
-        	 * Fechar o EntityManager e o EntityManagerFactory.
-        	 */
+
+            /**
+             * Fechar o EntityManager e o EntityManagerFactory.
+             */
             em.close();
             emf.close();
         }
+
     }
+
 }

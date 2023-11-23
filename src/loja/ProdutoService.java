@@ -27,6 +27,14 @@ public class ProdutoService {
     public Produto updateProduto(Produto produto) {
         if (produto.getId() == null) {
             em.persist(produto);
+
+            // Criar novo registro no Stock ao adicionar um novo produto
+            Stock novoStock = new Stock();
+            novoStock.setProduto(produto);
+            novoStock.setQuantidade(0); // Definir a quantidade inicial como 0
+            em.persist(novoStock);
+
+            produto.setStock(novoStock);
         } else {
             produto = em.merge(produto);
         }
@@ -71,4 +79,5 @@ public class ProdutoService {
         Query query = em.createQuery("SELECT c FROM Casa c");
         return query.getResultList();
     }
+    
 }

@@ -14,6 +14,7 @@
         <class>loja.Acessorios</class>
         <class>loja.Beleza</class>
         <class>loja.Casa</class>
+        <class>loja.Stock</class> <!-- Adicionando a classe Stock -->
  
         <properties>
    

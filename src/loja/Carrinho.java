@@ -5,22 +5,20 @@ import java.util.Scanner;
 
 /**
  * Classe que representa um carrinho de compras.
+ * Nota: Esta classe não precisa de anotações de persistência, porque é apenas uma estrutura de dados temporária para armazenar os produtos selecionados durante a execução do programa.
  */
 public class Carrinho {
 
-	/**
+    /**
      * Lista de produtos no carrinho.
      */
     private ArrayList<Produto> produtos;
-    private String codigoDesconto;
-    private static final double DESCONTO_LP = 0.15;
 
     /**
      * Construtor para inicializar o carrinho.
      */
     public Carrinho() {
         this.produtos = new ArrayList<>();
-        this.codigoDesconto = "";
     }
 
     /**
@@ -60,38 +58,45 @@ public class Carrinho {
     }
 
     /**
-     * Finaliza a compra, perguntando ao cliente se deseja aplicar um código de desconto.
-     * Se inserido o código "DESCONTOLP", aplica um desconto de 15% sobre o valor final.
-     * Exibe os valores com desconto (se aplicável) e apresenta mensagem de agradecimento.
+     * Calcula o total do carrinho com desconto, tendo em conta a aplicação do código de desconto.
      */
-    public void finalizarCompra() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Deseja finalizar a compra? (sim/não)");
-        String resposta = scanner.nextLine().toLowerCase();
+    public double calcularTotalComDesconto(String codigoDesconto) {
+        double total = calcularTotal();
 
-        if ("sim".equals(resposta)) {
-            System.out.println("Possui um código de desconto? (insira o código ou deixe em branco)");
-            codigoDesconto = scanner.nextLine();
-            double totalFinal = calcularTotalComDesconto();
-            System.out.println("Valor final da compra: €" + totalFinal);
-            System.out.println("Obrigado por comprar conosco!");
-        
-        } else {
-            System.out.println("Compra cancelada. Obrigado por visitar a nossa loja!");
+        if ("DESCONTOLP".equals(codigoDesconto)) {
+            double desconto = 0.15; // 15% de desconto
+            double valorDesconto = total * desconto;
+            double totalComDesconto = total - valorDesconto;
+
+            System.out.println("Desconto aplicado: 15%");
+            System.out.println("Total da compra (com desconto): €" + totalComDesconto);
+            return totalComDesconto;
+        } 
+        else {
+            System.out.println("Código de desconto inválido ou não aplicável.");
+            return total;
         }
     }
 
     /**
-     * Calcula o total do carrinho aplicando desconto se um código válido for inserido.
+     * Finaliza a compra, solicitando ao cliente se deseja finalizar a compra e se possui um código de desconto.
+     * Exibe mensagens de agradecimento e o valor final a ser pago.
      */
-    private double calcularTotalComDesconto() {
-        double total = calcularTotal();
-        if ("DESCONTOLP".equals(codigoDesconto)) {
-            double desconto = total * DESCONTO_LP;
-            total -= desconto;
-            System.out.println("Valor com desconto aplicado (15%): €" + desconto);
-            System.out.println("Valor final da compra com desconto: €" + total);
+    public void finalizarCompra() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Deseja finalizar a compra? (Digite 'sim' ou 'nao')");
+        String resposta = scanner.nextLine();
+        if ("sim".equalsIgnoreCase(resposta)) {
+            System.out.println("Você possui um código de desconto? (Digite o código ou deixe em branco)");
+            String codigoDesconto = scanner.nextLine();
+            double totalFinal = calcularTotalComDesconto(codigoDesconto);
+            System.out.println("Obrigado por comprar conosco!");
+            System.out.println("Valor final a ser pago: €" + totalFinal);
+        } 
+        else {
+            System.out.println("Compra cancelada. Obrigado por visitar nossa loja!");
         }
-        return total;
+    
     }
+    
 }
