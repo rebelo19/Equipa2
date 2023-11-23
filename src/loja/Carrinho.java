@@ -1,58 +1,78 @@
 package loja;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
  * Classe que representa um carrinho de compras.
- * Nota: Esta classe não precisa de anotações de persistência, porque é apenas uma estrutura de dados temporária para armazenar os produtos selecionados durante a execução do programa.
  */
 public class Carrinho {
+    private List<ItemCarrinho> itens;
 
     /**
-     * Lista de produtos no carrinho.
-     */
-    private ArrayList<Produto> produtos;
-
-    /**
-     * Construtor para inicializar o carrinho.
+     * Construtor para inicializar um carrinho vazio.
      */
     public Carrinho() {
-        this.produtos = new ArrayList<>();
+        this.itens = new ArrayList<>();
     }
 
     /**
-     * Adiciona um produto ao carrinho.
+     * Adiciona um produto ao carrinho com uma determinada quantidade.
+     * Exibe uma mensagem de erro se a quantidade for menor ou igual a zero.
      */
-    public void adicionarProduto(Produto produto) {
-        produtos.add(produto);
-        System.out.println(produto.getNome() + " adicionado ao carrinho.");
+    public void adicionarProduto(Produto produto, int quantidade) {
+        if (quantidade <= 0) {
+            System.out.println("Erro: A quantidade deve ser maior que zero. Por favor, corrija.");
+            return;
+        }
+
+        ItemCarrinho item = new ItemCarrinho(produto, quantidade);
+        itens.add(item);
+
+        System.out.println(quantidade + "x " + produto.getNome() + " adicionado ao carrinho.");
     }
 
     /**
      * Remove um produto do carrinho.
      */
     public void removerProduto(Produto produto) {
-        produtos.remove(produto);
-        System.out.println(produto.getNome() + " removido do carrinho.");
+        ItemCarrinho itemToRemove = null;
+        for (ItemCarrinho item : itens) {
+            if (item.getProduto().equals(produto)) {
+                itemToRemove = item;
+                break;
+            }
+        }
+
+        if (itemToRemove != null) {
+            itens.remove(itemToRemove);
+            System.out.println(produto.getNome() + " removido do carrinho.");
+        } else {
+            System.out.println("Erro: Produto não encontrado no carrinho.");
+        }
     }
 
     /**
      * Lista os produtos no carrinho.
      */
     public void listarProdutos() {
-        for (Produto produto : produtos) {
-            System.out.println(produto.getNome());
+        for (ItemCarrinho item : itens) {
+            Produto produto = item.getProduto();
+            int quantidade = item.getQuantidade();
+            System.out.println(produto.getNome() + " - Quantidade: " + quantidade);
         }
     }
 
     /**
-     * Calcula o total do carrinho.
+     * Calcula o total do carrinho para apresentar ao cliente, previamente à opção de colocar código de desconto.
      */
     public double calcularTotal() {
         double total = 0;
-        for (Produto produto : produtos) {
-            total += produto.getPreco();
+        for (ItemCarrinho item : itens) {
+            Produto produto = item.getProduto();
+            int quantidade = item.getQuantidade();
+            total += produto.getPreco() * quantidade;
         }
         return total;
     }
@@ -71,9 +91,8 @@ public class Carrinho {
             System.out.println("Desconto aplicado: 15%");
             System.out.println("Total da compra (com desconto): €" + totalComDesconto);
             return totalComDesconto;
-        } 
-        else {
-            System.out.println("Código de desconto inválido ou não aplicável.");
+        } else {
+            System.out.println("Erro: Código de desconto inválido, tente novamente.");
             return total;
         }
     }
@@ -92,11 +111,8 @@ public class Carrinho {
             double totalFinal = calcularTotalComDesconto(codigoDesconto);
             System.out.println("Obrigado por comprar conosco!");
             System.out.println("Valor final a ser pago: €" + totalFinal);
-        } 
-        else {
+        } else {
             System.out.println("Compra cancelada. Obrigado por visitar nossa loja!");
         }
-    
     }
-    
 }

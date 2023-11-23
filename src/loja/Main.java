@@ -156,9 +156,9 @@ public class Main {
         	 * Adicionar produtos ao carrinho.
         	 */
             Carrinho carrinho = new Carrinho();
-            carrinho.adicionarProduto(camisaazul);
-            carrinho.adicionarProduto(relogio);
-            carrinho.adicionarProduto(conjuntoPanelas);
+            carrinho.adicionarProduto(camisaazul, 1);
+            carrinho.adicionarProduto(relogio,1);
+            carrinho.adicionarProduto(conjuntoPanelas, 3);
 
             /**
         	 * Remover produtos do carrinho.

@@ -60,6 +60,14 @@ public class StockService {
     public Stock getStock(Produto produto) {
         return entityManager.find(Stock.class, produto.getId());
     }
+    
+    /**
+     * Obtém a quantidade disponível no stock para um produto específico.
+     */
+    public int getQuantidadeDisponivel(Produto produto) {
+        Stock stock = getStock(produto);
+        return (stock != null) ? stock.getQuantidade() : 0;
+    }
 
     /**
      * Obtém uma lista de todos os registos de stock na loja.
@@ -68,12 +76,5 @@ public class StockService {
         Query query = entityManager.createQuery("SELECT s FROM Stock s", Stock.class);
         return query.getResultList();
     }
-
-    /**
-     * Obtém a quantidade disponível no stock para um produto específico.
-     */
-    public int getQuantidadeDisponivel(Produto produto) {
-        Stock stock = getStock(produto);
-        return (stock != null) ? stock.getQuantidade() : 0;
-    }
+    
 }

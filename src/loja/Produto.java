@@ -57,4 +57,5 @@ public abstract class Produto {
     public void setStock(Stock stock) {
         this.stock = stock;
     }
+    
 }
