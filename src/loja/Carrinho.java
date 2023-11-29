@@ -8,6 +8,7 @@ import java.util.Scanner;
  * Classe que representa um carrinho de compras.
  */
 public class Carrinho {
+	
     private List<ItemCarrinho> itens;
 
     /**
@@ -20,9 +21,6 @@ public class Carrinho {
     /**
      * Adiciona um produto ao carrinho com uma determinada quantidade.
      * Exibe uma mensagem de erro se a quantidade for menor ou igual a zero.
-     *
-     * @param produto    O produto a ser adicionado ao carrinho.
-     * @param quantidade A quantidade do produto a ser adicionada ao carrinho.
      */
     public void adicionarProduto(Produto produto, int quantidade) {
         if (quantidade <= 0) {

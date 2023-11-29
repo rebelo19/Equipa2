@@ -17,6 +17,9 @@ public abstract class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+	 * Atributos.
+	 */
     private String nome;
     private double preco;
 
