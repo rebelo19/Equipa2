@@ -6,36 +6,37 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 /**
- * Classe principal que contém o método main para executar o programa. De acordo com CRUD.
+ * Classe principal que contém o método main para executar o programa e realizar operações CRUD em uma loja.
  */
 public class Main {
 
     public static void main(String[] args) {
+        // Configurar o EntityManager e a fábrica EntityManager
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("LibraryLoja");
         EntityManager em = emf.createEntityManager();
         ProdutoService produtoService = new ProdutoService(em);
-        StockService stockService = new StockService(em); // Adicione esta linha
+        StockService stockService = new StockService(em);
 
         try {
             /**
-             * Iniciar uma transação
+             * Iniciar uma transação para operações no banco de dados.
              */
             em.getTransaction().begin();
 
             /**
-             * Inserir produtos.
+             * Inserir produtos na base de dados.
              */
 
-            // Roupas
-            Roupa camisaazul = new Roupa();
-            camisaazul.setNome("Camisa Azul");
-            camisaazul.setPreco(9.99);
-            camisaazul.setTamanho("M");
+            // Roupa
+            Roupa camisaAzul = new Roupa();
+            camisaAzul.setNome("Camisa Azul");
+            camisaAzul.setPreco(9.99);
+            camisaAzul.setTamanho("M");
 
-            Roupa calcasganga = new Roupa();
-            calcasganga.setNome("Calças Ganga");
-            calcasganga.setPreco(19.99);
-            calcasganga.setTamanho("34");
+            Roupa calcasGanga = new Roupa();
+            calcasGanga.setNome("Calças Ganga");
+            calcasGanga.setPreco(19.99);
+            calcasGanga.setTamanho("34");
 
             // Acessórios
             Acessorios relogio = new Acessorios();
@@ -67,14 +68,14 @@ public class Main {
 
             Casa conjuntoPanelas = new Casa();
             conjuntoPanelas.setNome("Conjunto de Panelas");
-            conjuntoPanelas.setPreco(99.99);
+            conjuntoPanelas.setPreco(65.99);
             conjuntoPanelas.setParaRecolhaNaLoja(false);
 
             /**
-             * Persistir produtos.
+             * Persistir produtos na base de dados.
              */
-            produtoService.updateProduto(camisaazul);
-            produtoService.updateProduto(calcasganga);
+            produtoService.updateProduto(camisaAzul);
+            produtoService.updateProduto(calcasGanga);
             produtoService.updateProduto(relogio);
             produtoService.updateProduto(oculosDeSol);
             produtoService.updateProduto(perfume);
@@ -83,15 +84,18 @@ public class Main {
             produtoService.updateProduto(conjuntoPanelas);
 
             /**
-             * Dar commit da transação.
+             * Confirmar as alterações na transação.
              */
             em.getTransaction().commit();
 
             /**
-             * Dar commit da transação.
+             * Persistir informações de estoque na base de dados.
              */
-            stockService.addStock(camisaazul, 50);
-            stockService.addStock(relogio, 30);
+            stockService.addStock(camisaAzul, 33);
+            stockService.addStock(relogio, 20);
+            stockService.addStock(conjuntoPanelas, 12);
+            stockService.addStock(almofada, 7);
+            stockService.addStock(batomVermelho, 65);
 
             /**
              * Listar produtos por categorias.
@@ -106,7 +110,7 @@ public class Main {
             System.out.println("");
 
             /**
-             * Listar roupas.
+             * Listar roupas disponíveis.
              */
             System.out.println("ROUPAS:");
             for (Roupa roupa : roupas) {
@@ -116,7 +120,7 @@ public class Main {
             System.out.println("-------------------------");
 
             /**
-             * Listar acessórios.
+             * Listar acessórios disponíveis.
              */
             System.out.println("ACESSÓRIOS:");
             for (Acessorios acessorio : acessorios) {
@@ -126,7 +130,7 @@ public class Main {
             System.out.println("-------------------------");
 
             /**
-             * Listar produtos de beleza.
+             * Listar produtos de beleza disponíveis.
              */
             System.out.println("PRODUTOS DE BELEZA:");
             for (Beleza produtoBeleza : beleza) {
@@ -134,16 +138,16 @@ public class Main {
                 System.out.println(produtoBeleza.getNome() + " - Tipo: " + produtoBeleza.getTipo() + " - Preço: €" + produtoBeleza.getPreco() + " - Quantidade Disponível: " + quantidadeDisponivel);
             }
             System.out.println("-------------------------");
-            
+
             /**
-             * Listar produtos para casa.
+             * Listar produtos para casa disponíveis.
              */
             System.out.println("PRODUTOS PARA CASA:");
             for (Casa produtoCasa : casa) {
                 int quantidadeDisponivel = stockService.getQuantidadeDisponivel(produtoCasa);
                 System.out.println(produtoCasa.getNome() + " - Para Recolha na Loja: " + produtoCasa.isParaRecolhaNaLoja() + " - Preço: €" + produtoCasa.getPreco() + " - Quantidade Disponível: " + quantidadeDisponivel);
             }
-            
+
             /**
              * Exemplo de compra.
              */
@@ -153,35 +157,35 @@ public class Main {
             System.out.println("");
 
             /**
-        	 * Adicionar produtos ao carrinho.
-        	 */
+             * Adicionar produtos ao carrinho de compras.
+             */
             Carrinho carrinho = new Carrinho();
-            carrinho.adicionarProduto(camisaazul, 1);
-            carrinho.adicionarProduto(relogio,1);
+            carrinho.adicionarProduto(camisaAzul, 1);
+            carrinho.adicionarProduto(relogio, 1);
             carrinho.adicionarProduto(conjuntoPanelas, 3);
 
             /**
-        	 * Remover produtos do carrinho.
-        	 */
-            carrinho.removerProduto(camisaazul);
+             * Remover produtos do carrinho de compras.
+             */
+            carrinho.removerProduto(camisaAzul);
 
             /**
-        	 * Listar produtos no carrinho.
-        	 */
-            System.out.println("Produtos no carrinho:");
+             * Listar produtos no carrinho de compras.
+             */
+            System.out.println("Produtos no carrinho de compras:");
             carrinho.listarProdutos();
 
             /**
-        	 * Finalizar a compra.
-        	 */
+             * Finalizar a compra.
+             */
             double totalCompra = carrinho.calcularTotal();
             System.out.println("Total da compra: €" + totalCompra);
             carrinho.finalizarCompra();
 
             /**
-             * Consultar quantidade disponível de um produto.
+             * Consultar quantidade disponível de um produto específico.
              */
-            int quantidadeCamisaAzul = stockService.getQuantidadeDisponivel(camisaazul);
+            int quantidadeCamisaAzul = stockService.getQuantidadeDisponivel(camisaAzul);
             System.out.println("Quantidade disponível de Camisa Azul: " + quantidadeCamisaAzul);
 
             /**
@@ -193,13 +197,13 @@ public class Main {
             }
 
         } catch (Exception e) {
-            // Se ocorrer algum erro, fazer rollback na transação
+            // Em caso de erro, realizar rollback na transação e imprimir a stack trace.
             em.getTransaction().rollback();
             e.printStackTrace();
         } finally {
 
             /**
-             * Fechar o EntityManager e o EntityManagerFactory.
+             * Fechar EntityManager e EntityManagerFactory.
              */
             em.close();
             emf.close();
