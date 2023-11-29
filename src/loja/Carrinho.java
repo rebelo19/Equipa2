@@ -10,12 +10,14 @@ import java.util.Scanner;
 public class Carrinho {
 	
     private List<ItemCarrinho> itens;
-
+    private StockService stockService;
+    
     /**
      * Construtor para inicializar um carrinho vazio.
      */
-    public Carrinho() {
+    public Carrinho(StockService stockService) {  // Modificado
         this.itens = new ArrayList<>();
+        this.stockService = stockService;  // Adicionado
     }
 
     /**
@@ -23,19 +25,19 @@ public class Carrinho {
      * Exibe uma mensagem de erro se a quantidade for menor ou igual a zero.
      */
     public void adicionarProduto(Produto produto, int quantidade) {
+        int quantidadeDisponivel = stockService.getQuantidadeDisponivel(produto);
         if (quantidade <= 0) {
             System.out.println("Erro: A quantidade deve ser maior que zero. Por favor, corrija.");
-            return;
+        } else if (quantidadeDisponivel < quantidade) {
+            System.out.println("Erro: A quantidade desejada não está disponível no stock. A quantidade máxima disponível é: " + quantidadeDisponivel);
+        } else {
+            ItemCarrinho item = new ItemCarrinho(produto, quantidade);
+            itens.add(item);
+            String mensagem = (quantidade > 1)
+                    ? quantidade + " " + produto.getNome() + " adicionados ao carrinho."
+                    : quantidade + " " + produto.getNome() + " adicionado ao carrinho.";
+            System.out.println(mensagem);
         }
-
-        ItemCarrinho item = new ItemCarrinho(produto, quantidade);
-        itens.add(item);
-
-        String mensagem = (quantidade > 1)
-                ? quantidade + " " + produto.getNome() + " adicionados ao carrinho."
-                : quantidade + " " + produto.getNome() + " adicionado ao carrinho.";
-
-        System.out.println(mensagem);
     }
 
     /**
