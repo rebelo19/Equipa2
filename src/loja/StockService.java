@@ -9,7 +9,8 @@ import java.util.List;
  * Classe que gere operações relacionadas com o stock na loja.
  */
 public class StockService {
-    private EntityManager entityManager;
+    
+	private EntityManager entityManager;
 
     /**
      * Construtor que recebe um EntityManager como parâmetro.
@@ -24,16 +25,13 @@ public class StockService {
     public void addStock(Produto produto, int quantidade) {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-
         Stock stock = getStock(produto);
-
         if (stock == null) {
             stock = new Stock();
             stock.setProduto(produto);
             entityManager.persist(stock);
             produto.setStock(stock);
         }
-
         stock.setQuantidade(stock.getQuantidade() + quantidade);
         transaction.commit();
     }
