@@ -9,12 +9,27 @@ import javax.persistence.Entity;
 @Entity
 public class Casa extends Produto {
 
+	
+	
 	/**
 	 * Atributos.
 	 */
     private boolean paraRecolhaNaLoja;
-
+    
     /**
+	 * Construtores.
+	 */
+    
+    public Casa() {
+    	super();
+    }
+    
+    public Casa(boolean paraRecolhaNaLoja) {
+		super();
+		this.paraRecolhaNaLoja = paraRecolhaNaLoja;
+	}
+
+	/**
      * Getters e setters.
      */
 	public boolean isParaRecolhaNaLoja() {

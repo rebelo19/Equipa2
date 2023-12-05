@@ -16,8 +16,21 @@ public abstract class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     /**
+	 * Construtores.
+	 */
+    public Produto() {
+    }
+    
+    public Produto(Long id, String nome, double preco, Stock stock) {
+		this.id = id;
+		this.nome = nome;
+		this.preco = preco;
+		this.stock = stock;
+	}
+
+	/**
 	 * Atributos.
 	 */
     private String nome;
